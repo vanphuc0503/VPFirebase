@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1040712174588",
+    "project_id": "vpfirebase-878f1",
+    "storage_bucket": "vpfirebase-878f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040712174588:android:f485497e41685a0d108079",
+        "android_client_info": {
+          "package_name": "com.vanphuc0503.vpfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040712174588-ij76lj0v9um1642fep6rv7jamrl5gvfk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDsDpPK_Tb88Bf-91_bqDoE-HTwP7L7Fkw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040712174588-ij76lj0v9um1642fep6rv7jamrl5gvfk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
