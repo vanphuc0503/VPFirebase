@@ -7,4 +7,6 @@ object Constance {
     const val MESSAGING = "Messaging"
     const val DYNAMIC_LINKS = "Dynamic Links"
     const val AD_MOD = "AdMob"
+
+    const val CLIENT_WEB_ID = "675428161793-t0h5jufctfqft7dtpus3gathe5l6sdce.apps.googleusercontent.com"
 }

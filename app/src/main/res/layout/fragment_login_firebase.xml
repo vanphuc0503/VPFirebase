@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="listener"
+            type="com.vanphuc0503.vpfirebase.listener.LoginFirebaseListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context=".LoginFirebase">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_header_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/text_firebase_login"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:hint="@string/text_holder_email"
+            app:layout_constraintTop_toBottomOf="@id/tv_header_login">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_password"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/text_holder_password"
+            app:layout_constraintTop_toBottomOf="@id/layout_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/teal_700"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{v -> listener.onClickLogin()}"
+            android:text="@string/text_login"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/layout_password" />
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/teal_700"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{v -> listener.onClickRegister()}"
+            android:text="@string/text_register"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/btn_login" />
+
+        <Button
+            android:id="@+id/btn_anonymous"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/teal_700"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{v -> listener.onClickLoginAnonymous()}"
+            android:text="@string/text_holder_anonymous"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/btn_register" />
+
+        <Button
+            android:id="@+id/btn_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/teal_700"
+            android:foreground="?attr/selectableItemBackground"
+            android:onClick="@{v -> listener.onClickLoginPhone()}"
+            android:text="@string/text_phone"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/btn_anonymous" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/linear_login_third_party"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/btn_phone">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_google"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:drawableStart="@drawable/google"
+                android:drawablePadding="16dp"
+                android:onClick="@{v -> listener.onClickLoginGoogle()}"
+                android:padding="16dp"
+                android:text="@string/text_google" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_facebook"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:drawableStart="@drawable/facebook"
+                android:drawablePadding="16dp"
+                android:onClick="@{v -> listener.onClickLoginFacebook()}"
+                android:padding="16dp"
+                android:text="@string/text_facebook" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_github"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:drawableStart="@drawable/github"
+                android:drawablePadding="16dp"
+                android:onClick="@{v -> listener.onClickLoginGithub()}"
+                android:padding="16dp"
+                android:text="@string/text_github" />
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

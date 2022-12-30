@@ -9,5 +9,27 @@
         android:id="@+id/mainFragment"
         android:name="com.vanphuc0503.vpfirebase.fragment.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/openLoginFirebase"
+            app:destination="@id/loginFirebase" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFirebase"
+        android:name="com.vanphuc0503.vpfirebase.fragment.login.LoginFirebaseFragment"
+        android:label="fragment_login_firebase"
+        tools:layout="@layout/fragment_login_firebase">
+
+        <action
+            android:id="@+id/openHomeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+
 </navigation>
