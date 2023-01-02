@@ -1,9 +1,10 @@
 package com.vanphuc0503.vpfirebase.fragment.login
 
+import android.app.Activity
 import android.content.Intent
-import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
@@ -54,6 +55,59 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
 
     override var layoutID: Int = R.layout.fragment_login_firebase
 
+
+    private var resultGoogleLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK
+                && result.data != null
+            ) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    val account = task.getResult(ApiException::class.java)!!
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.w(TAG, "Google sign in failed", e)
+                    // ...
+                }
+            }
+        }
+
+    private var resultGoogleOneTapLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK
+                && result.data != null
+            ) {
+                try {
+                    val credential = oneTapClient.getSignInCredentialFromIntent(result.data)
+                    // This credential contains a googleIdToken which
+                    // we can use to authenticate with FirebaseAuth
+                    credential.googleIdToken?.let {
+                        firebaseAuthWithGoogle(it)
+                    }
+                    // If the user used email/password, the credential
+                    // should provide the user's email and password
+                    credential.password?.let { password ->
+                        signInWithPassword(credential.id, password)
+                    }
+                } catch (e: ApiException) {
+                    when (e.statusCode) {
+                        CommonStatusCodes.CANCELED -> {
+                            // The user closed the dialog
+                            userDeclinedOneTap = true
+                        }
+                        CommonStatusCodes.NETWORK_ERROR -> {
+                            // No Internet connection ?
+                        }
+                        else -> {
+                            // Some other error
+                        }
+                    }
+                }
+            }
+        }
+
     override fun initView() {
         binding.apply {
             listener = this@LoginFirebaseFragment
@@ -72,7 +126,7 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
         auth = Firebase.auth
 
         //--------------------- OneTapGoogle -------------------------------
-        initOpenTapGoogle()
+//        initOpenTapGoogle()
         initLoginFacebook()
     }
 
@@ -81,19 +135,21 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
             this@LoginFirebaseFragment.callbackManager = CallbackManager.Factory.create()
             setPermissions(EMAIL, PUBLIC_PROFILE)
             setFragment(this@LoginFirebaseFragment)
-            registerCallback(this@LoginFirebaseFragment.callbackManager, object : FacebookCallback<LoginResult> {
-                override fun onCancel() {
-                    Log.d(TAG, "facebook:onCancel")
-                }
+            registerCallback(
+                this@LoginFirebaseFragment.callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onCancel() {
+                        Log.d(TAG, "facebook:onCancel")
+                    }
 
-                override fun onError(error: FacebookException) {
-                    Log.d(TAG, "facebook:onError", error)
-                }
+                    override fun onError(error: FacebookException) {
+                        Log.d(TAG, "facebook:onError", error)
+                    }
 
-                override fun onSuccess(result: LoginResult) {
-                    handleFacebookAccessToken(result.accessToken)
-                }
-            })
+                    override fun onSuccess(result: LoginResult) {
+                        handleFacebookAccessToken(result.accessToken)
+                    }
+                })
         }
     }
 
@@ -111,8 +167,10 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(context, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     updateUI(null)
                 }
             }
@@ -156,7 +214,7 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
         } ?: kotlin.run {
             // Check if the user has saved credentials on our app
             // and display the One Tap UI
-            activity?.let {
+/*            activity?.let {
                 oneTapClient.beginSignIn(signInRequest)
                     .addOnSuccessListener(it) { result ->
                         try {
@@ -173,57 +231,13 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
                         // do nothing and continue presenting the signed-out UI.
                         Log.d(TAG, "No saved credentials: ${e.localizedMessage} ")
                     }
-            }
+            }*/
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-            REQ_SIGN_IN_GOOGLE -> {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                try {
-                    // Google Sign In was successful, authenticate with Firebase
-                    val account = task.getResult(ApiException::class.java)!!
-                    firebaseAuthWithGoogle(account.idToken!!)
-                } catch (e: ApiException) {
-                    // Google Sign In failed, update UI appropriately
-                    Log.w(TAG, "Google sign in failed", e)
-                    // ...
-                }
-            }
-            // Result returned from launching the Intent from startIntentSenderForResult(...)
-            REQ_ONE_TAP -> {
-                try {
-                    val credential = oneTapClient.getSignInCredentialFromIntent(data)
-                    // This credential contains a googleIdToken which
-                    // we can use to authenticate with FirebaseAuth
-                    credential.googleIdToken?.let {
-                        firebaseAuthWithGoogle(it)
-                    }
-                    // If the user used email/password, the credential
-                    // should provide the user's email and password
-                    credential.password?.let { password ->
-                        signInWithPassword(credential.id, password)
-                    }
-                } catch (e: ApiException) {
-                    when (e.statusCode) {
-                        CommonStatusCodes.CANCELED -> {
-                            // The user closed the dialog
-                            userDeclinedOneTap = true
-                        }
-                        CommonStatusCodes.NETWORK_ERROR -> {
-                            // No Internet connection ?
-                        }
-                        else -> {
-                            // Some other error
-                        }
-                    }
-                }
-            }
-        }
     }
 
     // Sign in to an existing password account
@@ -309,8 +323,10 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInAnonymously:failure", task.exception)
-                    Toast.makeText(context, "Authentication failed.",
-                        Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context, "Authentication failed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     updateUI(null)
                 }
             }
@@ -406,22 +422,83 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
 
     private fun signInGoogle() {
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, REQ_SIGN_IN_GOOGLE)
+        resultGoogleLauncher.launch(signInIntent)
     }
 
     override fun onClickLoginGoogleOneTap() {
         val intent = googleSignInClient.signInIntent
-        startActivityForResult(intent, REQ_ONE_TAP)
+        resultGoogleOneTapLauncher.launch(intent)
     }
 
     override fun onClickLoginGithub() {
+        val provider = OAuthProvider.newBuilder("github.com")
+        // Target specific email with login hint.
+        provider.addCustomParameter("login", "vanphuc.earn.money@gmail.com")
+        // Request read access to a user's email addresses.
+        // This must be preconfigured in the app's API permissions.
+        val scopes = arrayListOf<String>().apply {
+            add("user:email")
+        }
+        provider.scopes = scopes
+        val pendingResultTask = auth.pendingAuthResult
+        if (pendingResultTask != null) {
+            // There's something already here! Finish the sign-in for your user.
+            pendingResultTask
+                .addOnSuccessListener {
+                    // User is signed in.
+                    // IdP data available in
+                    // authResult.getAdditionalUserInfo().getProfile().
+                    // The OAuth access token can also be retrieved:
+                    // ((OAuthCredential)authResult.getCredential()).getAccessToken().
+                }
+                .addOnFailureListener {
+                    // Handle failure.
+                }
+        } else {
+            auth
+                .startActivityForSignInWithProvider( /* activity= */requireActivity(),
+                    provider.build()
+                )
+                .addOnSuccessListener { results ->
+                    (results.credential as? OAuthCredential)?.let { authCredential ->
+                        authCredential.accessToken?.let { it -> handleGithubAccessToken(it) }
+                    }
+                    // User is signed in.
+                    // IdP data available in
+                    // authResult.getAdditionalUserInfo().getProfile().
+                    // The OAuth access token can also be retrieved:
+                    // ((OAuthCredential)authResult.getCredential()).getAccessToken().
+                }
+                .addOnFailureListener {
+                    it.message
+                    // Handle failure.
+                }
+        }
+    }
 
+    private fun handleGithubAccessToken(token: String) {
+        val credential = GithubAuthProvider.getCredential(token)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+
+                    val user = task.result?.user
+                    updateUI(user)
+                } else {
+                    // Sign in failed, display a message and update the UI
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
+                    }
+                    updateUI(null)
+                }
+            }
     }
 
     companion object {
         private const val TAG = "LoginFirebaseFragment"
-        const val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
-        const val REQ_SIGN_IN_GOOGLE = 3
         const val EMAIL = "email"
         const val PUBLIC_PROFILE = "public_profile"
     }
