@@ -6,6 +6,6 @@ interface LoginFirebaseListener {
     fun onClickRegister()
     fun onClickLoginPhone()
     fun onClickLoginGoogle()
-    fun onClickLoginFacebook()
+    fun onClickLoginGoogleOneTap()
     fun onClickLoginGithub()
 }

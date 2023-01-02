@@ -1,5 +1,6 @@
 package com.vanphuc0503.vpfirebase.fragment
 
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.vanphuc0503.vpfirebase.Constance.AD_MOD
@@ -19,6 +20,7 @@ class MainFragment : BaseFragment<FragmentMainBinding, ViewModel>(),
     FirebaseRecyclerViewListener<String> {
 
     override var layoutID: Int = R.layout.fragment_main
+    override val viewModel: ViewModel by viewModels()
 
     private val firebaseAdapter by lazy {
         FirebaseRecyclerView(

@@ -13,4 +13,14 @@
     <string name="text_google">Google</string>
     <string name="text_facebook">Facebook</string>
     <string name="text_github">Github</string>
+    <string name="text_logout_onetap">Logout OneTap</string>
+    <string name="text_login_google">Login Google</string>
+
+    <!-- Facebook -->
+    <string name="facebook_app_id">3421932894702341</string>
+    <string name="fb_login_protocol_scheme">fb3421932894702341</string>
+    <string name="facebook_client_token">b9e84cc3a3ce451ebb8bb77edad16882</string>
+    <string name="text_holder_phone">Phone</string>
+
+
 </resources>

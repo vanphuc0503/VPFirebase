@@ -4,8 +4,14 @@ import android.content.Intent
 import android.content.IntentSender
 import android.util.Log
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
+import com.facebook.AccessToken
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -15,9 +21,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.vanphuc0503.vpfirebase.Constance.CLIENT_WEB_ID
@@ -26,12 +32,18 @@ import com.vanphuc0503.vpfirebase.base.BaseFragment
 import com.vanphuc0503.vpfirebase.databinding.FragmentLoginFirebaseBinding
 import com.vanphuc0503.vpfirebase.extension.navigateWithAnim
 import com.vanphuc0503.vpfirebase.listener.LoginFirebaseListener
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewModel>(),
     LoginFirebaseListener {
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var auth: FirebaseAuth
+    override val viewModel: LoginFirebaseViewModel by viewModels()
+    lateinit var callbackManager: CallbackManager
+    private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+    private var storedVerificationId: String? = ""
 
     //--------------------- OneTapGoogle -------------------------------
     private lateinit var oneTapClient: SignInClient
@@ -45,6 +57,7 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
     override fun initView() {
         binding.apply {
             listener = this@LoginFirebaseFragment
+            viewModel = this@LoginFirebaseFragment.viewModel
         }
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -52,12 +65,57 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
             .requestEmail()
             .build()
 
+        binding.countryPicker.registerCarrierNumberEditText(binding.tvPhone)
+
         // Initialize Firebase Auth
         googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
         auth = Firebase.auth
 
         //--------------------- OneTapGoogle -------------------------------
         initOpenTapGoogle()
+        initLoginFacebook()
+    }
+
+    private fun initLoginFacebook() {
+        binding.tvFacebook.apply {
+            this@LoginFirebaseFragment.callbackManager = CallbackManager.Factory.create()
+            setPermissions(EMAIL, PUBLIC_PROFILE)
+            setFragment(this@LoginFirebaseFragment)
+            registerCallback(this@LoginFirebaseFragment.callbackManager, object : FacebookCallback<LoginResult> {
+                override fun onCancel() {
+                    Log.d(TAG, "facebook:onCancel")
+                }
+
+                override fun onError(error: FacebookException) {
+                    Log.d(TAG, "facebook:onError", error)
+                }
+
+                override fun onSuccess(result: LoginResult) {
+                    handleFacebookAccessToken(result.accessToken)
+                }
+            })
+        }
+    }
+
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        Log.d(TAG, "handleFacebookAccessToken:$token")
+
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    Toast.makeText(context, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    updateUI(null)
+                }
+            }
     }
 
     private fun initOpenTapGoogle() {
@@ -121,8 +179,21 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        callbackManager.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
+            // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+            REQ_SIGN_IN_GOOGLE -> {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    val account = task.getResult(ApiException::class.java)!!
+                    firebaseAuthWithGoogle(account.idToken!!)
+                } catch (e: ApiException) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.w(TAG, "Google sign in failed", e)
+                    // ...
+                }
+            }
             // Result returned from launching the Intent from startIntentSenderForResult(...)
             REQ_ONE_TAP -> {
                 try {
@@ -219,28 +290,128 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
     }
 
     override fun onClickLogin() {
-
+        if (viewModel.email.value?.isNotEmpty() == true && viewModel.password.value?.isNotEmpty() == true) {
+            signInWithPassword(
+                viewModel.email.value.toString(),
+                viewModel.password.value.toString()
+            )
+        }
     }
 
     override fun onClickLoginAnonymous() {
-
+        auth.signInAnonymously()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInAnonymously:success")
+                    val user = auth.currentUser
+                    updateUI(user)
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Log.w(TAG, "signInAnonymously:failure", task.exception)
+                    Toast.makeText(context, "Authentication failed.",
+                        Toast.LENGTH_SHORT).show()
+                    updateUI(null)
+                }
+            }
     }
 
     override fun onClickRegister() {
-
+        if (viewModel.email.value?.isNotEmpty() == true && viewModel.password.value?.isNotEmpty() == true) {
+            signUpWithPassword(
+                viewModel.email.value.toString(),
+                viewModel.password.value.toString()
+            )
+        }
     }
 
     override fun onClickLoginPhone() {
+        if (!viewModel.phone.value.isNullOrEmpty()) {
+            val options = PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(binding.countryPicker.fullNumberWithPlus)       // Phone number to verify
+                .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                .setActivity(requireActivity())                 // Activity (for callback binding)
+                .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+                .build()
+            PhoneAuthProvider.verifyPhoneNumber(options)
+        }
+    }
 
+    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            // This callback will be invoked in two situations:
+            // 1 - Instant verification. In some cases the phone number can be instantly
+            //     verified without needing to send or enter a verification code.
+            // 2 - Auto-retrieval. On some devices Google Play services can automatically
+            //     detect the incoming verification SMS and perform verification without
+            //     user action.
+            Log.d(TAG, "onVerificationCompleted:$credential")
+            signInWithPhoneAuthCredential(credential)
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            // This callback is invoked in an invalid request for verification is made,
+            // for instance if the the phone number format is not valid.
+            Log.w(TAG, "onVerificationFailed", e)
+
+            if (e is FirebaseAuthInvalidCredentialsException) {
+                // Invalid request
+            } else if (e is FirebaseTooManyRequestsException) {
+                // The SMS quota for the project has been exceeded
+            }
+
+            // Show a message and update the UI
+        }
+
+        override fun onCodeSent(
+            verificationId: String,
+            token: PhoneAuthProvider.ForceResendingToken
+        ) {
+            // The SMS verification code has been sent to the provided phone number, we
+            // now need to ask the user to enter the code and then construct a credential
+            // by combining the code with a verification ID.
+            Log.d(TAG, "onCodeSent:$verificationId")
+
+            // Save verification ID and resending token so we can use them later
+            storedVerificationId = verificationId
+            resendToken = token
+        }
+    }
+
+    // [START sign_in_with_phone]
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
+
+                    val user = task.result?.user
+                    updateUI(user)
+                } else {
+                    // Sign in failed, display a message and update the UI
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
+                    }
+                    updateUI(null)
+                }
+            }
     }
 
     override fun onClickLoginGoogle() {
-        val intent = googleSignInClient.signInIntent
-        startActivityForResult(intent, REQ_ONE_TAP)
+        signInGoogle()
     }
 
-    override fun onClickLoginFacebook() {
+    private fun signInGoogle() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, REQ_SIGN_IN_GOOGLE)
+    }
 
+    override fun onClickLoginGoogleOneTap() {
+        val intent = googleSignInClient.signInIntent
+        startActivityForResult(intent, REQ_ONE_TAP)
     }
 
     override fun onClickLoginGithub() {
@@ -250,5 +421,8 @@ class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewMod
     companion object {
         private const val TAG = "LoginFirebaseFragment"
         const val REQ_ONE_TAP = 2  // Can be any integer unique to the Activity
+        const val REQ_SIGN_IN_GOOGLE = 3
+        const val EMAIL = "email"
+        const val PUBLIC_PROFILE = "public_profile"
     }
 }
