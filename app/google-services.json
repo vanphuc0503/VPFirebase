@@ -12,20 +12,7 @@
           "package_name": "com.vanphuc0503.vpfirebase"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "1040712174588-qct8kbtmtnmrrvbld44sgbi63oj7qcfq.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.vanphuc0503.vpfirebase",
-            "certificate_hash": "479cdb320cd54737b378c96f6889c5301f97ff8a"
-          }
-        },
-        {
-          "client_id": "1040712174588-ij76lj0v9um1642fep6rv7jamrl5gvfk.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyDsDpPK_Tb88Bf-91_bqDoE-HTwP7L7Fkw"

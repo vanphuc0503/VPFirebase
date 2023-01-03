@@ -71,4 +71,9 @@ dependencies {
     //country code picker
     implementation 'com.hbb20:ccp:2.4.7'
     implementation 'io.michaelrocks:libphonenumber-android:8.13.3'
+
+    //Pin view
+    implementation 'com.chaos.view:pinview:1.4.3'
+
+    implementation "androidx.browser:browser:1.4.0"
 }

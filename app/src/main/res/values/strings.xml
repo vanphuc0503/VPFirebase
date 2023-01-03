@@ -21,6 +21,8 @@
     <string name="fb_login_protocol_scheme">fb3421932894702341</string>
     <string name="facebook_client_token">b9e84cc3a3ce451ebb8bb77edad16882</string>
     <string name="text_holder_phone">Phone</string>
-
+    <string name="text_verification">Code Verification</string>
+    <string name="text_verification_one_code">Enter one time password send on/n%s</string>
+    <string name="text_verify_code">Verify code</string>
 
 </resources>
