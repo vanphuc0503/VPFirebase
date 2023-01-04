@@ -10,20 +10,76 @@
         android:name="com.vanphuc0503.vpfirebase.fragment.MainFragment"
         android:label="fragment_main"
         tools:layout="@layout/fragment_main">
+
         <action
             android:id="@+id/openLoginFirebase"
             app:destination="@id/loginFirebase" />
+
         <action
             android:id="@+id/openCrashlytics"
             app:destination="@id/crashlyticsFragment" />
+
         <action
             android:id="@+id/openStorage"
             app:destination="@id/storageFragment" />
+
+        <action
+            android:id="@+id/openInAppMessaging"
+            app:destination="@id/inAppMessaging" />
+
+        <action
+            android:id="@+id/openDynamicLink"
+            app:destination="@id/dynamicLink" />
+
+        <action
+            android:id="@+id/openABTesting"
+            app:destination="@id/abTestingFragment" />
+
+        <action
+            android:id="@+id/openAnalytics"
+            app:destination="@id/analyticsFragment" />
+
+        <action
+            android:id="@+id/openTestLab"
+            app:destination="@id/testLabFragment" />
+
+        <action
+            android:id="@+id/openFireRemoteConfig"
+            app:destination="@id/fireRemoteConfigFragment" />
+
+        <action
+            android:id="@+id/openRealtimeDatabase"
+            app:destination="@id/realtimeDatabaseFragment" />
+
+        <action
+            android:id="@+id/openFireStore"
+            app:destination="@id/fireStoreFragment" />
+
+        <action
+            android:id="@+id/openAppCheck"
+            app:destination="@id/appCheckFragment" />
+
+        <action
+            android:id="@+id/openGoogleAdmob"
+            app:destination="@id/googleAdmobFragment" />
+
+        <action
+            android:id="@+id/openInAppPurchase"
+            app:destination="@id/inAppPurchaseFragment" />
+
+        <action
+            android:id="@+id/openML"
+            app:destination="@id/MLFragment" />
+
+        <action
+            android:id="@+id/openPerformanceMonitoring"
+            app:destination="@id/performanceMonitoringFragment" />
+
     </fragment>
 
     <fragment
         android:id="@+id/loginFirebase"
-        android:name="com.vanphuc0503.vpfirebase.fragment.login.LoginFirebaseFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.authentication.LoginFirebaseFragment"
         android:label="fragment_login_firebase"
         tools:layout="@layout/fragment_login_firebase">
 
@@ -37,7 +93,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.vanphuc0503.vpfirebase.fragment.home.HomeFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.authentication.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
         <action
@@ -49,22 +105,102 @@
 
     <fragment
         android:id="@+id/OTPFragment"
-        android:name="com.vanphuc0503.vpfirebase.fragment.login.OTPFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.authentication.OTPFragment"
         android:label="fragment_o_t_p"
         tools:layout="@layout/fragment_o_t_p">
         <argument
             android:name="phoneNumber"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/crashlyticsFragment"
         android:name="com.vanphuc0503.vpfirebase.fragment.crashlytics.CrashlyticsFragment"
         android:label="fragment_crashlytics"
         tools:layout="@layout/fragment_crashlytics" />
+
     <fragment
         android:id="@+id/storageFragment"
         android:name="com.vanphuc0503.vpfirebase.fragment.storage.StorageFragment"
         android:label="StorageFragment"
         tools:layout="@layout/fragment_storage" />
+
+    <fragment
+        android:id="@+id/inAppMessaging"
+        android:name="com.vanphuc0503.vpfirebase.fragment.in_app_messaging.InAppMessagingFragment"
+        android:label="fragment_in_app_messaging"
+        tools:layout="@layout/fragment_in_app_messaging" />
+
+    <fragment
+        android:id="@+id/dynamicLink"
+        android:name="com.vanphuc0503.vpfirebase.fragment.dynamic_links.DynamicLinkFragment"
+        android:label="DynamicLink"
+        tools:layout="@layout/fragment_dynamic_link" />
+
+    <fragment
+        android:id="@+id/abTestingFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.ab_testing.AbTestingFragment"
+        android:label="AbTestingFragment"
+        tools:layout="@layout/fragment_ab_testing" />
+
+    <fragment
+        android:id="@+id/analyticsFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.analytics.AnalyticsFragment"
+        android:label="AnalyticsFragment"
+        tools:layout="@layout/fragment_analytics" />
+
+    <fragment
+        android:id="@+id/appCheckFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.app_check.AppCheckFragment"
+        android:label="AppCheckFragment"
+        tools:layout="@layout/fragment_app_check" />
+
+    <fragment
+        android:id="@+id/testLabFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.test_lab.TestLabFragment"
+        android:label="TestLabFragment"
+        tools:layout="@layout/fragment_test_lab" />
+
+    <fragment
+        android:id="@+id/fireRemoteConfigFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.fire_remote_config.FireRemoteConfigFragment"
+        android:label="FireRemoteConfigFragment"
+        tools:layout="@layout/fragment_fire_remote_config" />
+
+    <fragment
+        android:id="@+id/realtimeDatabaseFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.realtime_database.RealtimeDatabaseFragment"
+        android:label="RealtimeDatabaseFragment"
+        tools:layout="@layout/fragment_realtime_database" />
+
+    <fragment
+        android:id="@+id/fireStoreFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.firestore.FireStoreFragment"
+        android:label="FireStoreFragment"
+        tools:layout="@layout/fragment_firestore" />
+
+    <fragment
+        android:id="@+id/googleAdmobFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.google_admob.GoogleAdmobFragment"
+        android:label="GoogleAdmobFragment"
+        tools:layout="@layout/fragment_google_admob" />
+
+    <fragment
+        android:id="@+id/inAppPurchaseFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.in_app_purchase.InAppPurchaseFragment"
+        android:label="InAppPurchaseFragment"
+        tools:layout="@layout/fragment_in_app_purchase" />
+
+    <fragment
+        android:id="@+id/MLFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.ml.MLFragment"
+        android:label="MLFragment"
+        tools:layout="@layout/fragment_ml" />
+
+    <fragment
+        android:id="@+id/performanceMonitoringFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.performance_monitoring.PerformanceMonitoringFragment"
+        android:label="PerformanceMonitoringFragment"
+        tools:layout="@layout/fragment_performance_monitoring" />
 
 </navigation>

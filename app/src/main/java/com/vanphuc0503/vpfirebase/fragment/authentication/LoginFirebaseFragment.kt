@@ -1,4 +1,4 @@
-package com.vanphuc0503.vpfirebase.fragment.login
+package com.vanphuc0503.vpfirebase.fragment.authentication
 
 import android.app.Activity
 import android.content.Intent

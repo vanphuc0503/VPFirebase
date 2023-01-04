@@ -77,10 +77,10 @@ class MainFragment : BaseFragment<FragmentMainBinding, ViewModel>(),
                 findNavController().navigateWithAnim(MainFragmentDirections.openLoginFirebase())
             }
             CLOUD_FIRE_STORE -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openFireStore())
             }
             REALTIME_DATABASE -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openRealtimeDatabase())
             }
             STORAGE -> {
                 findNavController().navigateWithAnim(MainFragmentDirections.openStorage())
@@ -89,40 +89,40 @@ class MainFragment : BaseFragment<FragmentMainBinding, ViewModel>(),
 
             }
             ML -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openML())
             }
             APP_CHECK -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openAppCheck())
             }
             PERFORMANCE_MONITORING -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openPerformanceMonitoring())
             }
             TEST_LAB -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openTestLab())
             }
             ANALYTICS -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openAnalytics())
             }
             FIRE_REMOTE_CONFIG -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openFireRemoteConfig())
             }
             A_B_TESTING -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openABTesting())
             }
             IN_APP_MESSAGING -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openInAppMessaging())
             }
             GOOGLE_ADMOB -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openGoogleAdmob())
             }
             DYNAMIC_LINKS -> {
-
+                findNavController().navigateWithAnim(MainFragmentDirections.openDynamicLink())
             }
             CRASHLYTICS -> {
                 findNavController().navigateWithAnim(MainFragmentDirections.openCrashlytics())
             }
             IN_APP_PURCHASE -> {
-                findNavController()
+                findNavController().navigateWithAnim(MainFragmentDirections.openInAppPurchase())
             }
         }
     }

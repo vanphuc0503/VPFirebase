@@ -7,12 +7,25 @@
         <entry key="..\:/Native Android/Android/VpFirebase/app/src/main/res/layout/fragment_main.xml" value="0.1" />
         <entry key="..\:/Native Android/Android/VpFirebase/app/src/main/res/layout/item_firebase_option.xml" value="0.3625" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_ab_testing.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_analytic.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_app_check.xml" value="0.36666666666666664" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_crashlytics.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_dynamic_link.xml" value="0.2125" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_fire_remote_config.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_firestore.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_google_admob.xml" value="0.18333333333333332" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_home.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_in_app_messaging.xml" value="0.2125" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_in_app_purchase.xml" value="0.36666666666666664" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_login_firebase.xml" value="0.22" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_ml.xml" value="0.36666666666666664" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_o_t_p.xml" value="0.25" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_performance_monitoring.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_realtime_database.xml" value="0.36666666666666664" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_storage.xml" value="0.36666666666666664" />
+        <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/fragment_test_lab.xml" value="0.36666666666666664" />
         <entry key="..\:/Phuc/VPFirebase/app/src/main/res/layout/item_firebase_option.xml" value="0.36666666666666664" />
         <entry key="..\:/PhucIT/Android/VPFirebase/app/src/main/res/layout/fragment_home.xml" value="0.1" />
         <entry key="..\:/PhucIT/Android/VPFirebase/app/src/main/res/layout/fragment_login_firebase.xml" value="0.22826086956521738" />

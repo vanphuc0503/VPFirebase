@@ -1,4 +1,4 @@
-package com.vanphuc0503.vpfirebase.fragment.home
+package com.vanphuc0503.vpfirebase.fragment.authentication
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel

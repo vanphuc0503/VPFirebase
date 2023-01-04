@@ -11,7 +11,7 @@
 
         <variable
             name="viewModel"
-            type="com.vanphuc0503.vpfirebase.fragment.login.LoginFirebaseViewModel" />
+            type="com.vanphuc0503.vpfirebase.fragment.authentication.LoginFirebaseViewModel" />
     </data>
 
     <androidx.core.widget.NestedScrollView
