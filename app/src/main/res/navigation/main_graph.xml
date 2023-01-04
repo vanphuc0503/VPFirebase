@@ -13,6 +13,12 @@
         <action
             android:id="@+id/openLoginFirebase"
             app:destination="@id/loginFirebase" />
+        <action
+            android:id="@+id/openCrashlytics"
+            app:destination="@id/crashlyticsFragment" />
+        <action
+            android:id="@+id/openStorage"
+            app:destination="@id/storageFragment" />
     </fragment>
 
     <fragment
@@ -50,5 +56,15 @@
             android:name="phoneNumber"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/crashlyticsFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.crashlytics.CrashlyticsFragment"
+        android:label="fragment_crashlytics"
+        tools:layout="@layout/fragment_crashlytics" />
+    <fragment
+        android:id="@+id/storageFragment"
+        android:name="com.vanphuc0503.vpfirebase.fragment.storage.StorageFragment"
+        android:label="StorageFragment"
+        tools:layout="@layout/fragment_storage" />
 
 </navigation>

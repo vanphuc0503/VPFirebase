@@ -22,8 +22,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.CommonStatusCodes
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -34,7 +32,6 @@ import com.vanphuc0503.vpfirebase.databinding.FragmentLoginFirebaseBinding
 import com.vanphuc0503.vpfirebase.extension.navigateWithAnim
 import com.vanphuc0503.vpfirebase.listener.LoginFirebaseListener
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class LoginFirebaseFragment : BaseFragment<FragmentLoginFirebaseBinding, ViewModel>(),
     LoginFirebaseListener {
