@@ -3,12 +3,14 @@ package com.vanphuc0503.vpfirebase
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
-import android.view.ViewGroup
-import android.widget.Button
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.vanphuc0503.vpfirebase.base.BaseActivity
 import com.vanphuc0503.vpfirebase.databinding.ActivityMainBinding
 
@@ -19,11 +21,30 @@ class MainActivity : BaseActivity<ActivityMainBinding, ViewModel>() {
     override val container: Int = R.id.container
 
     override fun initView() {
-        controller.addOnDestinationChangedListener {controller, _, _ ->
-            when(controller.currentDestination?.id) {
-                 else -> {}
+        controller.addOnDestinationChangedListener { controller, _, _ ->
+            when (controller.currentDestination?.id) {
+                else -> {}
             }
         }
+        askNotificationPermission()
+        //getInstanceFCM()
+    }
+
+    private fun getInstanceFCM() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get new FCM registration token
+            val token = task.result
+
+            // Log and toast
+            val msg = getString(R.string.msg_token_fmt, token)
+            Log.d(TAG, msg)
+            Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+        })
     }
 
     override fun initObservable() {

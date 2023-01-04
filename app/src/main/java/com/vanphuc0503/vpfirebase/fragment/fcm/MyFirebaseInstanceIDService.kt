@@ -1,4 +1,4 @@
-package com.vanphuc0503.vpfirebase.fragment.engage
+package com.vanphuc0503.vpfirebase.fragment.fcm
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -17,7 +17,6 @@ import androidx.work.WorkerParameters
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.vanphuc0503.vpfirebase.MainActivity
-
 
 class MyFirebaseInstanceIDService : FirebaseMessagingService() {
     private val TAG = "MyFirebaseMsgService"
